@@ -1,0 +1,33 @@
+# LocalRAG_Pro - docker-compose.yml
+#
+# 起動:   docker-compose up -d
+# 停止:   docker-compose down
+# ログ:   docker-compose logs -f api
+#
+# Ollama は別途ホスト側で起動してください: ollama serve
+
+services:
+  api:
+    build: .
+    container_name: localrag-api
+    ports:
+      - "5050:5050"
+    volumes:
+      # インデックスフォルダをコンテナにマウント（読み取り専用）
+      - "${US_ADMIN_INDEX_DIR:-./index}:/index:ro"
+    environment:
+      # インデックスパス（コンテナ内パス）
+      US_ADMIN_INDEX_DIR: /index
+      # Ollama はホスト側で動くため host.docker.internal 経由でアクセス
+      OLLAMA_HOST: http://host.docker.internal:11434
+      # 使用モデル（例: qwen2.5:3b-instruct）
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen2.5:3b-instruct}
+      # APIキー認証（空の場合は認証なし）
+      API_KEY: ${API_KEY:-}
+      # CORS 許可オリジン（カンマ区切り）
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost}
+      # 質問文字数上限
+      MAX_QUESTION_LEN: ${MAX_QUESTION_LEN:-1000}
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
