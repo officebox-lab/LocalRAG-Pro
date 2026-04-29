@@ -1,0 +1,17 @@
+# urls.txt — URL list for LocalRAG-Pro scraper
+# One URL per line. Lines starting with # are comments.
+#
+# Usage:
+#   python scrape.py
+#   python scrape.py --urls urls.txt --output docs
+#
+# Example URLs (replace with your own):
+
+# Company website
+# https://www.example.com/about
+
+# Internal wiki or manual
+# https://wiki.example.com/manual
+
+# Product documentation
+# https://docs.example.com/guide
